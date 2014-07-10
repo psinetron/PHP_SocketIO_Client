@@ -32,7 +32,7 @@ class SocketIO
         $out .= "Connection: Upgrade\r\n";
         $out .= "Sec-WebSocket-Key: $key\r\n";
         $out .= "Sec-WebSocket-Version: 13\r\n";
-        $out .= "Origin: *\r\n";
+        $out .= "Origin: *\r\n\r\n";
 
         fwrite($fd, $out);
         fwrite($fd, $this->hybi10Encode('42["message", "' . addslashes($message) . '"]'));
