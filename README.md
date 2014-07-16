@@ -1,7 +1,7 @@
 PHP_SocketIO_Client
 ===================
 
-PHP client for socket.io (websocket client)
+EN: PHP client for socket.io (websocket client)
 
 How to use:
 ```
@@ -12,3 +12,7 @@ if ($socketio->send('localhost', 9090, 'Hello world!')){
     echo 'Sorry, we have a mistake :\'(';
 }
 ```
+
+
+
+RUS: PHP клиент для socket.io
