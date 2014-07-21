@@ -33,8 +33,15 @@ class SocketIO
         $out .= "Sec-WebSocket-Key: $key\r\n";
         $out .= "Sec-WebSocket-Version: 13\r\n";
         $out .= "Origin: *\r\n\r\n";
-
+        
+        
+        
         fwrite($fd, $out);
+        
+        //*TODO
+        // EN: Need to wait response status before sending info
+        // RUS: Нужно убедиться что сервер ответил, прежде чем выполнять следующию строку
+        
         fwrite($fd, $this->hybi10Encode('42["message", "' . addslashes($message) . '"]'));
         return true;
     }
