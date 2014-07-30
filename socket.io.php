@@ -38,12 +38,14 @@ class SocketIO
         
         fwrite($fd, $out);
         
-        //*TODO
-        // EN: Need to wait response status before sending info
-        // RUS: Нужно убедиться что сервер ответил, прежде чем выполнять следующию строку
+        $result= fread($fd,1000000);
+        if (preg_match('#Sec-WebSocket-Accept#',$result)){
         
         fwrite($fd, $this->hybi10Encode('42["message", "' . addslashes($message) . '"]'));
+         fread($fd,1000000);
         return true;
+        
+        } else {return false;}
     }
 
 
