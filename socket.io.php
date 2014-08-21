@@ -38,7 +38,7 @@ class SocketIO
         
         fwrite($fd, $out);
         
-        $result= fread($fd,1000000);
+        $result= fread($fd,1000);
         if (preg_match('#Sec-WebSocket-Accept#',$result)){
         
         fwrite($fd, $this->hybi10Encode('42["message", "' . addslashes($message) . '"]'));
