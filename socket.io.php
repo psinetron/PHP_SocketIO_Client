@@ -105,11 +105,3 @@ class SocketIO
         return $frame;
     }
 }
-
-$socketio = new SocketIO();
-print 'HI';
-if ($socketio->send('178.208.77.21', 9092, 'message', 'Hello world!')){
-    echo 'we sent the message and disconnected';
-} else {
-    echo 'Sorry, we have a mistake :\'(';
-}
