@@ -33,7 +33,7 @@ class SocketIO
 
         fwrite($fd, $out);
         // 101 switching protocols, see if echoes key
-        $result= fread($fd,1000);
+        $result= fread($fd,10000);
 
         preg_match('#Sec-WebSocket-Accept:\s(.*)$#mU', $result, $matches);
         $keyAccept = trim($matches[1]);
