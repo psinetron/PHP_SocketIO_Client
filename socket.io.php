@@ -1,4 +1,3 @@
-<?php
 /**
  * Class SocketIO
  * develope by psinetron (slybeaver)
@@ -8,7 +7,6 @@
  */
 class SocketIO
 {
-
     /**
      * @param null $host - $host of socket server
      * @param null $port - port of socket server
@@ -18,7 +16,6 @@ class SocketIO
      * @param string $transport - transport type
      * @return bool
      */
-
     public function send($host = null, $port = null, $action= "message",  $data = null, $address = "/socket.io/?EIO=2", $transport = 'websocket')
     {
         $fd = fsockopen($host, $port, $errno, $errstr);
@@ -26,7 +23,6 @@ class SocketIO
             return false;
         } //Can't connect tot server
         $key = $this->generateKey();
-
         $out = "GET $address&transport=$transport HTTP/1.1\r\n";
         $out.= "Host: http://$host:$port\r\n";
         $out.= "Upgrade: WebSocket\r\n";
@@ -34,24 +30,21 @@ class SocketIO
         $out.= "Sec-WebSocket-Key: $key\r\n";
         $out.= "Sec-WebSocket-Version: 13\r\n";
         $out.= "Origin: *\r\n\r\n";
-        
+
         fwrite($fd, $out);
         // 101 switching protocols, see if echoes key
         $result= fread($fd,1000);
-        
+
         preg_match('#Sec-WebSocket-Accept:\s(.*)$#mU', $result, $matches);
         $keyAccept = trim($matches[1]);
         $expectedResonse = base64_encode(pack('H*', sha1($key . '258EAFA5-E914-47DA-95CA-C5AB0DC85B11')));
         $handshaked = ($keyAccept === $expectedResonse) ? true : false;
-
         if ($handshaked){
             fwrite($fd, $this->hybi10Encode('42["' . $action . '", "' . addslashes($data) . '"]'));
             fread($fd,1000000);
             return true;
         } else {return false;}
     }
-
-
     private function generateKey($length = 16)
     {
         $c = 0;
@@ -59,12 +52,9 @@ class SocketIO
         while ($c++ * 16 < $length) { $tmp .= md5(mt_rand(), true); }
         return base64_encode(substr($tmp, 0, $length));
     }
-
-
     private function hybi10Encode($payload, $type = 'text', $masked = true)
     {
         $frameHead = array();
-
         $payloadLength = strlen($payload);
         switch ($type) {
             case 'text':
@@ -106,16 +96,20 @@ class SocketIO
             for ($i = 0; $i < 4; $i++) {
                 $mask[$i] = chr(rand(0, 255));
             }
-
             $frameHead = array_merge($frameHead, $mask);
         }
         $frame = implode('', $frameHead);
-
         for ($i = 0; $i < $payloadLength; $i++) {
             $frame .= ($masked === true) ? $payload[$i] ^ $mask[$i % 4] : $payload[$i];
         }
-
         return $frame;
     }
+}
 
+$socketio = new SocketIO();
+print 'HI';
+if ($socketio->send('178.208.77.21', 9092, 'message', 'Hello world!')){
+    echo 'we sent the message and disconnected';
+} else {
+    echo 'Sorry, we have a mistake :\'(';
 }
