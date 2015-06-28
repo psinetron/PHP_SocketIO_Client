@@ -1,3 +1,4 @@
+<?php
 /**
  * Class SocketIO
  * develope by psinetron (slybeaver)
